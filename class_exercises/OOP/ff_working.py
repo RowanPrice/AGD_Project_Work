@@ -89,28 +89,44 @@ class NPCCharacter(Character):
 
 class Game:
 
+    @classmethod
+    def load_creatures(cls):
+        creatures = [Character("Dragon",10,22),
+                     Character("Orc",7,10),
+                     Character("Skeleton",5,8),
+                     Character("Large rat",6,6),
+                     ]
+        return creatures
+
     def __init__(self):
         self.opponent = None
         self.player = None
         self.round_result = None
         self.creatures = self.load_creatures
 
-    @classmethod
-    def load_creatures(cls):
-        creatures = [Character("Dragon",10,22),
-                     Character("Orc",7,10),
-                     Character("Skeleton",5,8),
-                     Character("Large rat",6,6),]
+    def choose_opponent(self):
+        self.opponent = random.choice(self.creatures)
+        self.creatures.remove(self.opponent)
+
+    def set_player(self, player_character):
+        self.player = player_character
+
+    def resolve_fight_round(self):
+        self.round_result = self.player.fight_round(self.opponent)
+
+    def return_characters_status(self,other):
+        msg = (self.player.return_character_status()+'\n'+self.opponent.return_character_status())
+        return msg
 
     def return_round_result(self, other):
-        msg = self.return_character_status()
-        msg2 = other.return_character_status()
-        if self.fight_round(other) == 'won':
-            return f"{msg}\n{msg2}\n{self.name} won"
+        if self.player.fight_round(other) == 'won':
+            return f"{self.player.return_roll_status()}\n{self.opponent.return_roll_status()}\n{self.player.name} won this round"
         elif self.fight_round(other) == 'lost':
-            return f"{msg}\n{msg2}\n{self.name} lost"
+            return f"{self.player.return_roll_status()}\n{self.opponent.return_roll_status()}\n{self.player.name} lost this round"
         else:
-            return f"{msg}\n{msg2}\n{self.name} drew"
+            return f"{self.player.return_roll_status()}\n{self.opponent.return_roll_status()}\n{self.player.name} and {self.opponent.name} drew this round"
+
+
 
 pc = Character('jim',skill=3,stamina=4)
 orc = Character('orc',skill=5,stamina=2)
