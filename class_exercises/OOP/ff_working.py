@@ -105,8 +105,9 @@ class Game:
         self.creatures = self.load_creatures
 
     def choose_opponent(self):
-        self.opponent = random.choice(self.creatures)
-        self.creatures.remove(self.opponent)
+        self.opponent = Character("Large rat",6,6)
+        #self.opponent = random.choice(self.creatures)
+        #self.creatures.remove(self.opponent)
 
     def set_player(self, player_character):
         self.player = player_character
@@ -114,19 +115,57 @@ class Game:
     def resolve_fight_round(self):
         self.round_result = self.player.fight_round(self.opponent)
 
-    def return_characters_status(self,other):
+    def return_characters_status(self):
         msg = (self.player.return_character_status()+'\n'+self.opponent.return_character_status())
         return msg
 
-    def return_round_result(self, other):
+    def return_round_result(self,other):
         if self.player.fight_round(other) == 'won':
             return f"{self.player.return_roll_status()}\n{self.opponent.return_roll_status()}\n{self.player.name} won this round"
-        elif self.fight_round(other) == 'lost':
+        elif self.player.fight_round(other) == 'lost':
             return f"{self.player.return_roll_status()}\n{self.opponent.return_roll_status()}\n{self.player.name} lost this round"
         else:
             return f"{self.player.return_roll_status()}\n{self.opponent.return_roll_status()}\n{self.player.name} and {self.opponent.name} drew this round"
 
+class GameCLI:
 
+    def __init__(self):
+        self.game = Game()
+        self.run_game()
 
-pc = Character('jim',skill=3,stamina=4)
-orc = Character('orc',skill=5,stamina=2)
+    def run_game(self):
+        print("Welcome to Fighting Fantasy!")
+        player_name = input("What is your name? ")
+        self.game.set_player(PlayerCharacter.generate_player_character(player_name))
+        print(f"Welcome {player_name}!")
+        print(self.game.player.return_character_status())
+        self.fight_opponent()
+
+    def fight_opponent(self):
+        self.game.choose_opponent()
+        print(f"You will be fighting {self.game.opponent.name}!")
+        print(self.game.opponent.return_character_status() + '\n')
+        self.fight_battle()
+
+    def fight_battle(self):
+        continue_battle = True
+        while continue_battle:
+            print(self.game.return_characters_status())
+            print()
+            action = input("Would you like to fight a round (y/n)? ").strip().lower()
+            if action == 'n':
+                print("You flee in terror!")
+                continue_battle = False
+            else:
+                self.game.resolve_fight_round()
+                print(self.game.return_round_result(self.game.opponent))
+                if self.game.player.is_dead:
+                    print("You died")
+                    continue_battle = False
+                if self.game.opponent.is_dead:
+                    print(f"You defeated the {self.game.opponent.name}")
+                    continue_battle = False
+
+if __name__ == '__main__':
+    GameCLI()
+
