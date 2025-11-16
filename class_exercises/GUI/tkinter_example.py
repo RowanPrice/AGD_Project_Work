@@ -8,23 +8,29 @@ class MainFrame(tk.Frame):
         self.txt = tk.Label(self,text="My tkinter app",bg="black",fg="red",)
         self.btn = tk.Button(self,text="Do not press",bg="black",fg="red",activebackground="red",activeforeground="black",)
         self.edt = tk.Entry(self)
-        self.sld = tk.Scale(self,from_=0,to=100,orient=tk.VERTICAL,bg="black",fg="red")
+        self.sld = tk.Scale(self,from_=0,to=100,orient=tk.HORIZONTAL,bg="black",fg="red")
 
         self.config(bg="black")
-
 
         self.place_widget()
 
     def place_widget(self):
+        settings = {'padx':10, 'pady':10, 'sticky':'nswe'}
         # .pack() puts the stuff as close to the top of the screen as possible
-        self.txt.grid(row=1,column=1,padx=10,pady=10)
-        self.btn.grid(row=1,column=0,padx=10,pady=10)
-        self.edt.grid(row=0,column=1,padx=10,pady=10)
-        self.sld.grid(row=0,column=0,padx=10,pady=10)
+        self.txt.grid(row=1,column=1, **settings)
+        self.btn.grid(row=1,column=0, **settings)
+        self.edt.grid(row=0,column=1, **settings)
+        self.sld.grid(row=0,column=0, **settings)
+
+        self.columnconfigure(0,weight=2)
+        self.columnconfigure(1,weight=1)
+        self.rowconfigure(0,weight=1)
+        self.rowconfigure(1,weight=3)
 
 if __name__ == '__main__':
     # root sets up a blank page to act as a background
     root = tk.Tk()
+    root.geometry("500x500+100+100")
     root.title("My tkinter app")
     main_frame = MainFrame(root)
     main_frame.pack(fill=tk.BOTH,expand=True)
