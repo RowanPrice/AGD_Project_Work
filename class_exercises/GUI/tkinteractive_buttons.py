@@ -22,7 +22,7 @@ class ButtonClicker(tk.Frame):
         super().__init__(master)
         self.counter = 0
 
-        self.btn = tk.Button(self, text="Do not press", bg="red", fg="black", activebackground="black",activeforeground="red", command=self.click_button())
+        self.btn = tk.Button(self, text="Do not press", bg="red", fg="black", activebackground="black",activeforeground="red", command=self.click_button)
         self.response_txt = tk.Label(self, text="No Clicks")
 
         self.place_widgets()
@@ -43,7 +43,7 @@ class BackgroundColorFrame(tk.Frame):
         super().__init__(master)
 
         # Color choices
-        self.colors = ['red', 'green', 'yellow']
+        self.colors = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'black', 'pink', 'gray1', 'gray2', 'gray3', 'gray4', 'gray5', 'gray6', 'gray7', 'gray8', 'gray9', 'gray10', 'gray11', 'gray12', 'gray13', 'gray14', 'gray15', 'gray16', 'gray17', 'gray18', 'gray19', 'gray20', 'gray21', 'gray22', 'gray23', 'gray24', 'gray25', 'gray26']
 
         # Create a tk variable which will hold the value of the selcted color
         self.selected_color = tk.StringVar()
@@ -53,7 +53,8 @@ class BackgroundColorFrame(tk.Frame):
         self.radio_options = [tk.Radiobutton(self, text=color,
                                              value=color,
                                              variable=self.selected_color,
-                                             command=self.change_color)
+                                             command=self.change_color,
+                              )
                               for color in self.colors]
 
         self.place_widgets()
@@ -62,6 +63,11 @@ class BackgroundColorFrame(tk.Frame):
         for ro in self.radio_options:
             ro.pack(side=tk.TOP, anchor='w', padx=(5, 10), pady=5)
 
+    def change_color(self):
+        colour = self.selected_color.get()
+        self.config(bg=colour)
+        self.master.config(bg=colour)
+        self.master.clicker_frame.config(bg=colour)
 
 if __name__ == '__main__':
     app = ClickApp()
