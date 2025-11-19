@@ -15,7 +15,7 @@ class MainFrame(tk.Frame):
         self.place_widget()
 
     def place_widget(self):
-        settings = {'padx':10, 'pady':10, 'sticky':'nswe'}
+        settings = {'padx':10, 'pady':10, 'sticky':'w'}
         # .pack() puts the stuff as close to the top of the screen as possible
         self.txt.grid(row=1,column=1, **settings)
         self.btn.grid(row=1,column=0, **settings)
