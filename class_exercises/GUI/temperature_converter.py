@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import json
+from temperature import Temperature
 
 #MainFrame is a subclass of tk.Frame
 class MainFrame(tk.Frame):
@@ -15,23 +16,40 @@ class MainFrame(tk.Frame):
         self.unit_select = ttk.Combobox(self,
                                            textvariable=self.unit_var,
                                            values=unit_options,
+                                           #command=self.other_unit_creation,
                                            )
 
-        self.other_units = [tk.Text(self, text=unit,
-                              )
-                              for unit in self.decide_other_units()]
 
-        self.edt = tk.Entry(self)
 
+        self.edt1 = tk.Entry(self)
+        self.edt2 = tk.Entry(self)
+        self.edt3 = tk.Entry(self)
+
+        self.other_unit_creation()
         self.place_widget()
+
+    def other_unit_creation(self):
+        self.other_units = [tk.Label(self, text=unit,
+                                     )
+                            for unit in self.decide_other_units()]
+
+        settings = {'padx': 10, 'pady': 10, 'sticky': 'w'}
+        count = 0
+        for cb in self.other_units:
+            count += 1
+            cb.grid(row=0, column=count, **settings)
 
     def place_widget(self):
         settings = {'padx':10, 'pady':10, 'sticky':'w'}
         # .pack() puts the stuff as close to the top of the screen as possible
         self.unit_select.grid(row=0,column=0, **settings)
-        self.edt.grid(row=1,column=0, **settings)
+        self.edt1.grid(row=1,column=0, **settings)
+        self.edt2.grid(row=1,column=1, **settings)
+        self.edt3.grid(row=1,column=2, **settings)
 
-        for
+
+
+
 
     def decide_other_units (self):
         input = self.unit_var.get()
