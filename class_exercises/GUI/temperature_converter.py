@@ -24,7 +24,11 @@ class MainFrame(tk.Frame):
         self.edt1 = tk.Entry(self)
         self.edt2 = tk.Entry(self)
         self.edt3 = tk.Entry(self)
-
+        
+        self.btn = tk.Button(self, text = 'Convert', bg = 'deep sky blue',activebackground="sky blue")
+        
+        self.config(bg='light goldenrod')
+        
         self.other_unit_creation()
         self.place_widget()
 
@@ -33,20 +37,21 @@ class MainFrame(tk.Frame):
                                      )
                             for unit in self.decide_other_units()]
 
-        settings = {'padx': 10, 'pady': 10, 'sticky': 'w'}
+        settings = {'padx': 10, 'pady': 10, 'sticky': 'snew'}
         count = 0
         for cb in self.other_units:
             count += 1
             cb.grid(row=0, column=count, **settings)
 
     def place_widget(self):
-        settings = {'padx':10, 'pady':10, 'sticky':'w'}
+        settings = {'padx':10, 'pady':10, 'sticky':'nswe'}
         # .pack() puts the stuff as close to the top of the screen as possible
         self.unit_select.grid(row=0,column=0, **settings)
         self.edt1.grid(row=1,column=0, **settings)
         self.edt2.grid(row=1,column=1, **settings)
         self.edt3.grid(row=1,column=2, **settings)
-
+        
+        self.btn.grid(row=2,column=0, padx =10, pady=10,sticky='w')
 
 
 
@@ -63,7 +68,7 @@ class MainFrame(tk.Frame):
 if __name__ == '__main__':
     # root sets up a blank page to act as a background
     root = tk.Tk()
-    root.geometry("500x500+100+100")
+    root.geometry("450x130+100+100")
     root.title('Temperature Converter')
     main_frame = MainFrame(root)
     main_frame.pack(fill=tk.BOTH,expand=True)
