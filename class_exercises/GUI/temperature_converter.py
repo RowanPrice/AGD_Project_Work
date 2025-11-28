@@ -6,8 +6,8 @@ from temperature import Temperature
 #MainFrame is a subclass of tk.Frame
 class MainFrame(tk.Frame):
 
-    def __init__(self, master):
-        super().__init__(master)
+    def __init__(self, parent):
+        super().__init__()
 
         unit_options = ['Kelvin', 'Fahrenheit', 'Celsius']
 
@@ -16,22 +16,35 @@ class MainFrame(tk.Frame):
         self.unit_select = ttk.Combobox(self,
                                            textvariable=self.unit_var,
                                            values=unit_options,
-                                           #command=self.other_unit_creation,
                                            )
-
-
-
-        self.edt1 = tk.Entry(self)
+        self.other_unit_creation()
+        
+        self.value_var = tk.StringVar()
+        self.value_var.set(0)
+        self.edt1 = tk.Entry(self,textvariable=self.value_var)
         self.edt2 = tk.Entry(self)
         self.edt3 = tk.Entry(self)
         
-        self.btn = tk.Button(self, text = 'Convert', bg = 'deep sky blue',activebackground="sky blue")
+        self.btn = tk.Button(self, text = 'Convert', bg = 'deep sky blue',activebackground="sky blue",command=self.convert)
         
         self.config(bg='light goldenrod')
         
-        self.other_unit_creation()
         self.place_widget()
-
+        
+        parent.bind('<<ComboboxSelected>>',lambda event:self.other_unit_creation())
+    
+    def convert(self):
+        unit_input = self.unit_var.get()
+        value_input = self.value_var.get()
+        temp = Temperature(int(value_input))
+        if unit_input == 'Celsius':
+            return (temp.fahrenheit,temp.kelvin)
+        elif unit_input == 'Fahrenheit':
+            return (temp.celsius,temp.kelvin)
+        elif unit_input == 'Kelvin':
+            return (temp.celsius,temp.fahrenheit) 
+        
+    
     def other_unit_creation(self):
         self.other_units = [tk.Label(self, text=unit,
                                      )
@@ -53,9 +66,6 @@ class MainFrame(tk.Frame):
         
         self.btn.grid(row=2,column=0, padx =10, pady=10,sticky='w')
 
-
-
-
     def decide_other_units (self):
         input = self.unit_var.get()
         if input == 'Celsius':
@@ -71,6 +81,6 @@ if __name__ == '__main__':
     root.geometry("450x130+100+100")
     root.title('Temperature Converter')
     main_frame = MainFrame(root)
-    main_frame.pack(fill=tk.BOTH,expand=True)
+    main_frame.pack(fill=tk.BOTH,expand=True,)
     # .mainloop() ensures all structures remain after their line has finished
     root.mainloop()
