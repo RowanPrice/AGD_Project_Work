@@ -4,15 +4,16 @@ import json
 from temperature import Temperature
 
 #MainFrame is a subclass of tk.Frame
-class MainFrame(tk.Frame):
+class MainFrame(tk.Frame,Temperature):
 
     def __init__(self, parent):
         super().__init__()
+        self.temp = Temperature(celsius=0)
 
-        unit_options = ['Kelvin', 'Fahrenheit', 'Celsius']
+        unit_options = ['kelvin', 'fahrenheit', 'celsius']
 
         self.unit_var = tk.StringVar()
-        self.unit_var.set("Celsius")
+        self.unit_var.set("celsius")
         self.unit_select = ttk.Combobox(self,
                                            textvariable=self.unit_var,
                                            values=unit_options,
@@ -30,19 +31,38 @@ class MainFrame(tk.Frame):
         self.config(bg='light goldenrod')
         
         self.place_widget()
+
+        self.place_edt_boxes()
         
         parent.bind('<<ComboboxSelected>>',lambda event:self.other_unit_creation())
-    
+
+        self.edt1.bind("<KeyRelease>", lambda event: self.convert())
+
     def convert(self):
-        unit_input = self.unit_var.get()
-        value_input = self.value_var.get()
-        temp = Temperature(int(value_input))
-        if unit_input == 'Celsius':
-            return (temp.fahrenheit,temp.kelvin)
-        elif unit_input == 'Fahrenheit':
-            return (temp.celsius,temp.kelvin)
-        elif unit_input == 'Kelvin':
-            return (temp.celsius,temp.fahrenheit) 
+        unit_input = self.unit_var.get().lower()
+
+        try:
+            value = float(self.value_var.get())
+        except ValueError:
+            return  'incorrect value entered'
+
+        if unit_input == "celsius":
+            self.temp.celsius = value
+            out1 = self.temp.fahrenheit
+            out2 = self.temp.kelvin
+        elif unit_input == "fahrenheit":
+            self.temp.fahrenheit = value
+            out1 = self.temp.celsius
+            out2 = self.temp.kelvin
+        elif unit_input == "kelvin":
+            self.temp.kelvin = value
+            out1 = self.temp.celsius
+            out2 = self.temp.fahrenheit
+
+        self.edt2.delete(0, tk.END)
+        self.edt3.delete(0, tk.END)
+        self.edt2.insert(0, f"{out1:.2f}")
+        self.edt3.insert(0, f"{out2:.2f}")
         
     
     def other_unit_creation(self):
@@ -56,24 +76,27 @@ class MainFrame(tk.Frame):
             count += 1
             cb.grid(row=0, column=count, **settings)
 
+    def place_edt_boxes(self):
+        settings = {'padx': 10, 'pady': 10, 'sticky': 'nswe'}
+        self.edt2.grid(row=1, column=1, **settings)
+        self.edt3.grid(row=1, column=2, **settings)
+
     def place_widget(self):
         settings = {'padx':10, 'pady':10, 'sticky':'nswe'}
         # .pack() puts the stuff as close to the top of the screen as possible
         self.unit_select.grid(row=0,column=0, **settings)
         self.edt1.grid(row=1,column=0, **settings)
-        self.edt2.grid(row=1,column=1, **settings)
-        self.edt3.grid(row=1,column=2, **settings)
-        
+
         self.btn.grid(row=2,column=0, padx =10, pady=10,sticky='w')
 
     def decide_other_units (self):
         input = self.unit_var.get()
-        if input == 'Celsius':
-            return ('Fahrenheit', 'Kelvin')
-        elif input == 'Fahrenheit':
-            return ('Celsius', 'Kelvin')
-        elif input == 'Kelvin':
-            return ('Celsius', 'Fahrenheit')
+        if input == 'celsius':
+            return ('fahrenheit', 'kelvin')
+        elif input == 'fahrenheit':
+            return ('celsius', 'kelvin')
+        elif input == 'kelvin':
+            return ('celsius', 'fahrenheit')
 
 if __name__ == '__main__':
     # root sets up a blank page to act as a background
