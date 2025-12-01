@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-import json
 from temperature import Temperature
 
 #MainFrame is a subclass of tk.Frame
@@ -21,7 +20,7 @@ class MainFrame(tk.Frame,Temperature):
         self.other_unit_creation()
         
         self.value_var = tk.StringVar()
-        self.value_var.set(0)
+        self.value_var.set('0')
         self.edt1 = tk.Entry(self,textvariable=self.value_var)
         self.edt2 = tk.Entry(self)
         self.edt3 = tk.Entry(self)
@@ -40,6 +39,8 @@ class MainFrame(tk.Frame,Temperature):
 
     def convert(self):
         unit_input = self.unit_var.get().lower()
+        out1 = 0
+        out2 = 0
 
         try:
             value = float(self.value_var.get())

@@ -18,9 +18,12 @@ class Temperature:
 
     @celsius.setter
     def celsius(self, value: float):
-        if value < -273.15:
-            raise ValueError('Celsius value must be greater than absolute zero (-273.15 \u00B0C)')
-        self._celsius = value
+        try:
+            if value < -273.15:
+                raise ValueError('Celsius value must be greater than absolute zero (-273.15 \u00B0C)')
+            self._celsius = value
+        except ValueError:
+            pass
 
     @property
     def fahrenheit(self)  -> float:
