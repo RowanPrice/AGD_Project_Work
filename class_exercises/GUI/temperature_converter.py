@@ -26,7 +26,7 @@ class MainFrame(tk.Frame,Temperature):
         self.edt2 = tk.Entry(self)
         self.edt3 = tk.Entry(self)
         
-        self.btn = tk.Button(self, text = 'Convert', bg = 'deep sky blue',activebackground="sky blue",command=self.convert)
+        #self.btn = tk.Button(self, text = 'Convert', bg = 'deep sky blue',activebackground="sky blue",command=self.convert)
         
         self.config(bg='light goldenrod')
         
@@ -61,8 +61,8 @@ class MainFrame(tk.Frame,Temperature):
 
         self.edt2.delete(0, tk.END)
         self.edt3.delete(0, tk.END)
-        self.edt2.insert(0, f"{out1:.2f}")
-        self.edt3.insert(0, f"{out2:.2f}")
+        self.edt2.insert(0, f"{out1}")
+        self.edt3.insert(0, f"{out2}")
         
     
     def other_unit_creation(self):
@@ -87,7 +87,7 @@ class MainFrame(tk.Frame,Temperature):
         self.unit_select.grid(row=0,column=0, **settings)
         self.edt1.grid(row=1,column=0, **settings)
 
-        self.btn.grid(row=2,column=0, padx =10, pady=10,sticky='w')
+        #self.btn.grid(row=2,column=0, padx =10, pady=10,sticky='w')
 
     def decide_other_units (self):
         input = self.unit_var.get()
@@ -101,7 +101,7 @@ class MainFrame(tk.Frame,Temperature):
 if __name__ == '__main__':
     # root sets up a blank page to act as a background
     root = tk.Tk()
-    root.geometry("450x130+100+100")
+    root.geometry("450x83+100+100")
     root.title('Temperature Converter')
     main_frame = MainFrame(root)
     main_frame.pack(fill=tk.BOTH,expand=True,)
