@@ -25,8 +25,6 @@ class MainFrame(tk.Frame,Temperature):
         self.edt2 = tk.Entry(self)
         self.edt3 = tk.Entry(self)
         
-        #self.btn = tk.Button(self, text = 'Convert', bg = 'deep sky blue',activebackground="sky blue",command=self.convert)
-        
         self.config(bg='light goldenrod')
         
         self.place_widget()
@@ -88,15 +86,13 @@ class MainFrame(tk.Frame,Temperature):
         self.unit_select.grid(row=0,column=0, **settings)
         self.edt1.grid(row=1,column=0, **settings)
 
-        #self.btn.grid(row=2,column=0, padx =10, pady=10,sticky='w')
-
     def decide_other_units (self):
-        input = self.unit_var.get()
-        if input == 'celsius':
+        input_value = self.unit_var.get()
+        if input_value == 'celsius':
             return ('fahrenheit', 'kelvin')
-        elif input == 'fahrenheit':
+        elif input_value == 'fahrenheit':
             return ('celsius', 'kelvin')
-        elif input == 'kelvin':
+        elif input_value == 'kelvin':
             return ('celsius', 'fahrenheit')
 
 if __name__ == '__main__':
