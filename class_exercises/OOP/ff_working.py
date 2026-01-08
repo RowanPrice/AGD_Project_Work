@@ -105,7 +105,7 @@ class Game:
         self.creatures = self.load_creatures
 
     def choose_opponent(self):
-        self.opponent = Character("Large rat",6,6)
+        self.opponent = Character("Extremely large rat",10,6)
         #self.opponent = random.choice(self.creatures)
         #self.creatures.remove(self.opponent)
 
