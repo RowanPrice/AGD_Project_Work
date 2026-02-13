@@ -34,11 +34,36 @@ class Controller:
             user_names = session.scalars(sa.select(User.name).order_by(User.name)).all()
         return list(user_names)
 
+    def get_user_info(self):
+        with so.Session(bind=self.engine) as session:
+            names = session.scalars(sa.select(User.name).order_by(User.name)).all()
+            ages = session.scalars(sa.select(User.age).order_by(User.name)).all()
+            genders = session.scalars(sa.select(User.gender).order_by(User.name)).all()
+            nationalities = session.scalars(sa.select(User.nationality).order_by(User.name)).all()
+            users = ''
+        return list(names,ages,genders,nationalities)
+
     def add_user(self, name: str, age: int, gender: str, nationality: str) -> None:
         with so.Session(bind=self.engine) as session:
             add_user = User(name=name, age=age, gender=gender, nationality=nationality)
             session.add(add_user)
             session.commit()
+
+    def get_user_details(self,name):
+        with so.Session(bind=self.engine) as session:
+            user = session.scalars(sa.select(User).where(User.name == name)).one_or_none()
+        return user
+
+    def get_user_gender(self,name):
+        with so.Session(bind=self.engine) as session:
+            user = session.scalars(sa.select(User).where(User.name == name)).one_or_none()
+        return user.gender
+
+    def get_user_nationality(self,name):
+        with so.Session(bind=self.engine) as session:
+            user = session.scalars(sa.select(User).where(User.name == name)).one_or_none()
+        return user.nationality
+
 
 if __name__ == '__main__':
     controller = Controller()

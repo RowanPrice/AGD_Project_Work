@@ -1,6 +1,7 @@
 import pyinputplus as pyip
 
 from controller_student import Controller
+from functools import partial
 
 
 class CLI:
@@ -77,10 +78,25 @@ class CLI:
         input()
         return self.user_home
 
-    def view_users(self):
-        self.show_title('View Users')
-        for user in self.controller.get_user_names():
+    def choose_user(self):
+        self.show_title('Choose User To View')
+        user_names = self.controller.get_user_names()
+        for user in user_names:
             print(user)
+        search = input()
+
+        if search in user_names:
+            return partial(self.view_user, search)
+        else:
+            return self.user_home
+
+    def view_user(self,user):
+        self.show_title(f'View User - {user}')
+        user_details = self.controller.get_user_details(user)
+        print(f'Name: {user}')
+        print(f'Age: {user_details.age}')
+        print(f'Gender: {user_details.gender}')
+        print(f'Nationality: {user_details.nationality}')
         input()
         return self.user_home
 
@@ -89,7 +105,7 @@ class CLI:
         self.show_title(f'User Home - {user_name.title()}')
         home_items = ['View posts',
                       'Create posts',
-                      'View users',
+                      'Choose user to view',
                       'View own posts',
                       'Exit',
                       ]
@@ -102,8 +118,8 @@ class CLI:
             next_menu = self.view_posts
         elif home_choice.lower() == 'create posts':
             next_menu = self.create_posts
-        elif home_choice.lower() == 'view users':
-            next_menu = self.view_users
+        elif home_choice.lower() == 'choose user to view':
+            next_menu = self.choose_user
         elif home_choice.lower() == 'exit':
             next_menu = self.exit_menus
         elif home_choice.lower() == 'view own posts':
