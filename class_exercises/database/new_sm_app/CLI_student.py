@@ -65,17 +65,36 @@ class CLI:
 
     def view_posts(self):
         self.show_title('View Posts')
-        input()
+        posts = self.controller.get_posts()
+        for post in posts:
+            user_name = self.controller.get_user_name(post.user_id)
+
+            print(f"\nTitle: {post.title}")
+            print(f"Description: {post.description}")
+            print(f"Author: {user_name}")
+            print("-" * 40)
+
+        input("\nEnter to return")
         return self.user_home
 
     def create_posts(self):
         self.show_title('Create Posts')
-        input()
+        title = input('Enter a title: ')
+        description = input('Enter a description: ')
+        self.controller.add_post(title, description)
         return self.user_home
 
     def view_own_posts(self):
         self.show_title('View Own Posts')
-        input()
+
+        posts = self.controller.get_posts_by_user(self.controller.current_user_id)
+
+        for post in posts:
+            print(f"\nTitle: {post.title}")
+            print(f"Description: {post.description}")
+            print("-" * 40)
+
+        input("\nPress Enter to return")
         return self.user_home
 
     def choose_user(self):
@@ -90,14 +109,70 @@ class CLI:
         else:
             return self.user_home
 
-    def view_user(self,user):
+    def view_user(self, user):
         self.show_title(f'View User - {user}')
+
         user_details = self.controller.get_user_details(user)
+
         print(f'Name: {user}')
         print(f'Age: {user_details.age}')
         print(f'Gender: {user_details.gender}')
         print(f'Nationality: {user_details.nationality}')
-        input()
+        print("\n--- Posts ---")
+
+        posts = self.controller.get_posts_by_user(user_details.id)
+
+        if not posts:
+            print("This user has no posts.")
+            input("\nPress enter to return...")
+            return self.user_home
+
+        for post in posts:
+            print(f"\nPost ID: {post.id}")
+            print(f"Title: {post.title}")
+            print(f"Description: {post.description}")
+            print(f"Likes: {post.number_of_likes}")
+            print("-" * 40)
+
+        post_id = input("Enter Post ID to interact or press enter to return: ")
+
+        if post_id.isdigit():
+            return partial(self.interact_with_post, int(post_id))
+
+        return self.user_home
+
+    def interact_with_post(self, post_id):
+        self.show_title(f"Post {post_id}")
+
+        menu_items = ['Like post', 'Comment', 'View comments', 'Back']
+        choice = pyip.inputMenu(menu_items, numbered=True)
+
+        if choice.lower() == 'like post':
+            self.controller.like_post(post_id)
+            print("Post liked")
+            input("\nPress Enter")
+            return self.user_home
+
+        elif choice.lower() == 'comment':
+            text = input("Enter your comment: ")
+            self.controller.add_comment(post_id, text)
+            print("Comment added")
+            input("\nPress Enter")
+            return self.user_home
+
+        elif choice.lower() == 'view comments':
+            comments = self.controller.get_comments_for_post(post_id)
+
+            if not comments:
+                print("No comments yet.")
+            else:
+                for c in comments:
+                    user_name = self.controller.get_user_name(c.user_id)
+                    print(f"\n{user_name}: {c.comment}")
+
+            input("\nPress Enter")
+            return partial(self.interact_with_post, post_id)
+
         return self.user_home
 
     def user_home(self):

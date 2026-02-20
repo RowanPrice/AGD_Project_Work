@@ -76,6 +76,6 @@ def write_initial_data(engine):
     session.commit()
 
 if __name__ == "__main__":
-    sqlite_engine = sa.create_engine('sqlite:///social_media.db', echo=True)
+    sqlite_engine = sa.create_engine('sqlite:///social_media.sqlite', echo=True)
     delete_existing_data(sqlite_engine)
     write_initial_data(sqlite_engine)
