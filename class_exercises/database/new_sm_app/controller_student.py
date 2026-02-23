@@ -54,7 +54,7 @@ class Controller:
             if post is None or user is None:
                 return
 
-            # Prevent duplicate likes
+
             if post not in user.liked_posts:
                 user.liked_posts.append(post)
                 session.commit()

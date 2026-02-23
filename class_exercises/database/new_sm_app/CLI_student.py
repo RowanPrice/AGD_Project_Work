@@ -144,27 +144,27 @@ class CLI:
     def interact_with_post(self, post_id):
         self.show_title(f"Post {post_id}")
 
-        menu_items = ['Like post', 'Comment', 'View comments', 'Back']
+        menu_items = ['Like post', 'Comment', 'View comments', 'Home']
         choice = pyip.inputMenu(menu_items, numbered=True)
 
         if choice.lower() == 'like post':
             self.controller.like_post(post_id)
             print("Post liked")
             input("\nPress Enter")
-            return self.user_home
+            return self.interact_with_post(post_id)
 
         elif choice.lower() == 'comment':
             text = input("Enter your comment: ")
             self.controller.add_comment(post_id, text)
             print("Comment added")
             input("\nPress Enter")
-            return self.user_home
+            return self.interact_with_post(post_id)
 
         elif choice.lower() == 'view comments':
             comments = self.controller.get_comments_for_post(post_id)
 
             if not comments:
-                print("No comments yet.")
+                print("No comments")
             else:
                 for c in comments:
                     user_name = self.controller.get_user_name(c.user_id)
