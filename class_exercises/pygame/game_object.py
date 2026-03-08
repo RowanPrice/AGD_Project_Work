@@ -1,5 +1,3 @@
-from game_controller import Game
-
 class GameObj:
     def __init__(self,name,pos,btype):
         self.name = name
