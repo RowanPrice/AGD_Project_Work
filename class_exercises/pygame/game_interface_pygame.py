@@ -44,11 +44,14 @@ class GameGUI:
         self.running = True
 
     @staticmethod
-    def _convert_position(pos: Position, center: bool = False) -> tuple[int, int]:
+    def _convert_position(pos, center: bool = False) -> tuple[int, int]:
         """ Convert a grid position in the game to an (x, y) coordinate
                 if centre is false the position returned is top-left and if center is true
                 the position returned is the centre """
-        ...
+        pos_y, pos_x = pos
+        if not center:
+            return pos_x, pos_y
+        return pos_x + 0.5, pos_y + 0.5
 
     def main_loop(self):
         while self.running:
