@@ -13,12 +13,12 @@ from pygame.locals import (
 
 SQUARE_SIZE = 50
 
-BACKGROUND_COLORS = {'Wall': 'gray30',
-                     'Start': 'gold',
-                     'Exit': 'dodgerblue',
-                     'Floor': 'white'
+BACKGROUND_COLORS = {'wall': 'gray30',
+                     'start': 'gold',
+                     'exit': 'dodgerblue',
+                     'floor': 'white'
                      }
-PLAYER_COLOR = 'firebrick'
+PLAYER_COLOR = 'green'
 
 class GameGUI:
     key_moves = {K_UP: 'n',
@@ -48,10 +48,10 @@ class GameGUI:
         """ Convert a grid position in the game to an (x, y) coordinate
                 if centre is false the position returned is top-left and if center is true
                 the position returned is the centre """
-        pos_y, pos_x = pos
+        pos_y, pos_x = pos[1]*SQUARE_SIZE, pos[0]*SQUARE_SIZE
         if not center:
             return pos_x, pos_y
-        return pos_x + 0.5, pos_y + 0.5
+        return pos_x + 0.5*SQUARE_SIZE, pos_y + 0.5*SQUARE_SIZE
 
     def main_loop(self):
         while self.running:
@@ -86,18 +86,21 @@ class GameGUI:
 
     def _draw_background(self):
         """Loop through all the game backgrounds and draw a rectangle of the appropriate colour"""
-        self.screen.fill(BACKGROUND_COLORS['Floor'])
+        self.screen.fill(BACKGROUND_COLORS['floor'])
         for bg in self.game.backgrounds:
+            if bg.pos == (0,7):
+                colour = 'gold'
+            else:
+                colour = BACKGROUND_COLORS[bg.name]
             grid_x, grid_y = self._convert_position(bg.pos)
-            color = BACKGROUND_COLORS[bg.name]
-            pygame.draw.rect(self.screen,color,(grid_x,grid_y,SQUARE_SIZE,SQUARE_SIZE))
+            pygame.draw.rect(self.screen,colour,(grid_x,grid_y,SQUARE_SIZE,SQUARE_SIZE))
 
     def _draw_characters(self):
         """Loop through the characters and draw a circle for each character"""
         for char in self.game.characters:
-            grid_x, grid_y = self._convert_position(char.pos)
-            color = PLAYER_COLOR[char.name]
-            pygame.draw.circle(self.screen,color,(grid_x,grid_y),char.size)
+            grid_x, grid_y = self._convert_position(char.pos,True)
+            color = PLAYER_COLOR
+            pygame.draw.circle(self.screen,color,(grid_x,grid_y),25)
 
 if __name__ == "__main__":
     game = GameGUI()
