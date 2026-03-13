@@ -21,7 +21,7 @@ class CharacterObj(GameObj):
             return self.pos[0] - 1, self.pos[1]
         elif direction == 'down':
             return self.pos[0], self.pos[1] + 1
-        else:
+        elif direction == 'up':
             return self.pos[0], self.pos[1] - 1
 
     def move(self,direction):
@@ -31,5 +31,5 @@ class CharacterObj(GameObj):
             self.pos = (self.pos[0] - 1, self.pos[1])
         elif direction == 'down':
             self.pos = (self.pos[0], self.pos[1] + 1)
-        else:
+        elif direction == 'up':
             self.pos = (self.pos[0], self.pos[1] - 1)

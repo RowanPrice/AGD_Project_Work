@@ -72,11 +72,22 @@ class GameGUI:
 
             # Checks for movement keys amd sets self.move_direction according to the key pressed.
             # Otherwise, set self.move_direction to None
-            ...
+            if event.type == KEYDOWN and event.key == K_LEFT:
+                self.move_direction = 'left'
+            elif event.type == KEYDOWN and event.key == K_RIGHT:
+                self.move_direction = 'right'
+            elif event.type == KEYDOWN and event.key == K_UP:
+                self.move_direction = 'up'
+            elif event.type == KEYDOWN and event.key == K_DOWN:
+                self.move_direction = 'down'
+
 
     def _process_game_logic(self):
         """ Implements character moves and checks if player has reached the exit """
-        ...
+        self.game.move_character(self.player, self.move_direction)
+        self.move_direction = None
+        if self.player.pos == (15,11):
+            self.running = False
 
     def _draw(self):
         """draw background first then characters"""
