@@ -4,3 +4,4 @@ matplotlib
 faker
 sqlalchemy
 pygame-ce
+pygame==2.0.0
